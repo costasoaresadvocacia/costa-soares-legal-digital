@@ -1,4 +1,4 @@
-import { Scale, ShieldCheck, Scroll, Briefcase } from "lucide-react";
+import { Scale, ShieldCheck, Scroll, Briefcase, MapPinned } from "lucide-react";
 
 const areas = [
   {
@@ -20,6 +20,11 @@ const areas = [
     icon: Briefcase,
     title: "Assessoria Empresarial",
     desc: "Consultoria preventiva, contratos empresariais e suporte estratégico para negócios.",
+  },
+  {
+    icon: MapPinned,
+    title: "Regularização Fundiária",
+    desc: "Assessoria judicial e administrativa em processo de regularização fundiária em loteamentos e núcleos habitacionais.",
   },
 ];
 
