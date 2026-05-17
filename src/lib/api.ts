@@ -55,6 +55,7 @@ const fallbackContent: SiteContent = {
       photoUrl: "",
     },
   ],
+  logoUrl: "",
 };
 
 const fallbackPosts: Post[] = [
