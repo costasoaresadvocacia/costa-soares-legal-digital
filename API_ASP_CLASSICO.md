@@ -38,7 +38,7 @@ Documentação para implementação do back-end em **ASP Clássico (VBScript / I
 
 ```sql
 CREATE TABLE site_content (
-  chave    NVARCHAR(50)  PRIMARY KEY, -- ex.: 'heroTitle'
+  chave    NVARCHAR(50)  PRIMARY KEY, -- ex.: 'heroTitle', 'logoUrl'
   valor    NVARCHAR(MAX) NOT NULL
 );
 
