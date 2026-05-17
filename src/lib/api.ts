@@ -8,6 +8,7 @@ export interface SiteContent {
   aboutTitle: string;
   aboutText: string;
   lawyers: Lawyer[];
+  logoUrl?: string;
 }
 
 export interface Lawyer {
