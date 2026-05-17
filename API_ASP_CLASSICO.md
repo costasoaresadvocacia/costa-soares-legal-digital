@@ -126,6 +126,7 @@ End If
 ```
 
 ### Regras
+- `logoUrl` é **opcional**. Quando preenchido, o site exibe a imagem no cabeçalho e rodapé; quando vazio ou ausente, exibe o texto "Costa Soares Advogados".
 - Os campos `heroTitle`, `heroSubtitle`, `aboutTitle`, `aboutText` são **obrigatórios**.
 - `lawyers` deve conter **exatamente 2 itens** (estrutura visual do site).
 - `photoUrl` deve apontar para imagem **HTTPS**, idealmente 800×1000 px (proporção 4:5).
