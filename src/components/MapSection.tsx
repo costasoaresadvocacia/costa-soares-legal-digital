@@ -1,8 +1,7 @@
 import mapImg from "@/assets/map-blurred.jpg";
 import pinImg from "@/assets/map-pin.png";
 
-// Endereço de exemplo — substitua pelo endereço real do escritório
-const ADDRESS = "Costa Soares Advogados, São Paulo, SP, Brasil";
+const ADDRESS = "Rua Enrico Lippi, 20, Vila Sorocabana, Mairinque, SP - CEP 18121-024";
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`;
 
 const MapSection = () => (

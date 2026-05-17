@@ -15,7 +15,7 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
             </div>
           </div>
           <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-            Escritório de advocacia especializado em Direito Cível, Direito do Consumidor, Sucessões e Assessoria Empresarial.
+            Escritório de advocacia especializado em Direito Cível, Direito do Consumidor, Direito Imobiliário, Sucessões e Assessoria Empresarial.
           </p>
         </div>
         <div>
