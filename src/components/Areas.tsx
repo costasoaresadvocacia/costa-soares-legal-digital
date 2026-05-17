@@ -1,4 +1,4 @@
-import { Scale, ShieldCheck, Scroll, Briefcase } from "lucide-react";
+import { Scale, ShieldCheck, Scroll, Briefcase, MapPinned } from "lucide-react";
 
 const areas = [
   {
