@@ -8,11 +8,11 @@ const About = ({ title, text }: { title: string; text: string }) => (
         <p className="text-muted-foreground leading-relaxed text-lg font-light">{text}</p>
       </div>
       <div className="grid grid-cols-2 gap-6">
-        {["+20", "500+", "15", "98%"].map((n, i) => (
+        {["+20", "500+"].map((n, i) => (
           <div key={i} className="border border-border p-8 text-center bg-card">
             <div className="font-serif text-4xl text-gradient-gold mb-2">{n}</div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground">
-              {["Anos de Experiência", "Casos Resolvidos", "Especialistas", "Clientes Satisfeitos"][i]}
+              {["Anos de Experiência", "Casos Resolvidos"][i]}
             </div>
           </div>
         ))}

@@ -57,8 +57,8 @@ const Contact = () => {
               <MapPin className="h-6 w-6 text-primary mt-1" strokeWidth={1.5} />
               <div>
                 <div className="text-xs uppercase tracking-widest text-muted-foreground mb-1">Endereço</div>
-                <p className="text-lg">São Paulo, SP — Brasil</p>
-                <p className="text-sm text-muted-foreground">costasoares.adv.br</p>
+                <p className="text-lg">Rua Enrico Lippi, 20</p>
+                <p className="text-sm text-muted-foreground">Vila Sorocabana, Mairinque/SP — CEP 18121-024</p>
               </div>
             </div>
           </div>

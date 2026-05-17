@@ -1,4 +1,4 @@
-import { Scale, ShieldCheck, Scroll, Briefcase, MapPinned } from "lucide-react";
+import { Scale, ShieldCheck, Scroll, Briefcase, MapPinned, Home } from "lucide-react";
 
 const areas = [
   {
@@ -25,6 +25,11 @@ const areas = [
     icon: MapPinned,
     title: "Regularização Fundiária",
     desc: "Assessoria judicial e administrativa em processo de regularização fundiária em loteamentos e núcleos habitacionais.",
+  },
+  {
+    icon: Home,
+    title: "Direito Imobiliário",
+    desc: "Assessoria e defesa em ações possessórias, venda e compra de imóveis e litigioso em geral envolvendo o ramo.",
   },
 ];
 
