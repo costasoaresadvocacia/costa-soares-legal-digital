@@ -99,6 +99,7 @@ End If
 
 ```json
 {
+  "logoUrl": "https://costasoares.adv.br/uploads/logo.png",
   "heroTitle": "Costa Soares Advogados",
   "heroSubtitle": "Excelência em Direito Cível, Consumidor, Sucessório e Assessoria Empresarial.",
   "aboutTitle": "Tradição, ética e resultado",
