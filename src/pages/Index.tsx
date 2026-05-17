@@ -29,7 +29,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header logoUrl={content.logoUrl} />
       <main>
         <Hero title={content.heroTitle} subtitle={content.heroSubtitle} />
         <About title={content.aboutTitle} text={content.aboutText} />
@@ -39,7 +39,7 @@ const Index = () => {
         <Contact />
         <MapSection />
       </main>
-      <Footer />
+      <Footer logoUrl={content.logoUrl} />
     </div>
   );
 };
