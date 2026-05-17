@@ -21,6 +21,11 @@ const areas = [
     title: "Assessoria Empresarial",
     desc: "Consultoria preventiva, contratos empresariais e suporte estratégico para negócios.",
   },
+  {
+    icon: MapPinned,
+    title: "Regularização Fundiária",
+    desc: "Assessoria judicial e administrativa em processo de regularização fundiária em loteamentos e núcleos habitacionais.",
+  },
 ];
 
 const Areas = () => (
