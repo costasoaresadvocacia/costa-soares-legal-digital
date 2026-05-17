@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
 
 const links = [
   { href: "#sobre", label: "Sobre" },
@@ -9,7 +8,7 @@ const links = [
   { href: "#contato", label: "Contato" },
 ];
 
-const Header = () => {
+const Header = ({ logoUrl }: { logoUrl?: string }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -27,8 +26,10 @@ const Header = () => {
     >
       <div className="container mx-auto flex items-center justify-between py-4">
         <a href="#top" className="flex items-center gap-3">
-          <img src={logo} alt="Costa Soares Advogados" width={48} height={48} className="h-12 w-12 object-contain" />
-          <div className="hidden sm:block">
+          {logoUrl ? (
+            <img src={logoUrl} alt="Costa Soares Advogados" width={48} height={48} className="h-12 w-12 object-contain" />
+          ) : null}
+          <div className={logoUrl ? "hidden sm:block" : ""}>
             <div className="font-serif text-xl text-primary leading-none">Costa Soares</div>
             <div className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Advogados</div>
           </div>

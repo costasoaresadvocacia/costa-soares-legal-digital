@@ -1,13 +1,14 @@
 import { Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
-import logo from "@/assets/logo.png";
 
-const Footer = () => (
+const Footer = ({ logoUrl }: { logoUrl?: string }) => (
   <footer className="bg-background border-t border-border py-16">
     <div className="container mx-auto px-4">
       <div className="grid md:grid-cols-4 gap-12 mb-12">
         <div className="md:col-span-2">
           <div className="flex items-center gap-3 mb-4">
-            <img src={logo} alt="Costa Soares" width={48} height={48} className="h-12 w-12 object-contain" />
+            {logoUrl ? (
+              <img src={logoUrl} alt="Costa Soares" width={48} height={48} className="h-12 w-12 object-contain" />
+            ) : null}
             <div>
               <div className="font-serif text-xl text-primary">Costa Soares</div>
               <div className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Advogados</div>

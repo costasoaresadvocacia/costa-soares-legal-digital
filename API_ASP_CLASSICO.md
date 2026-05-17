@@ -38,7 +38,7 @@ Documentação para implementação do back-end em **ASP Clássico (VBScript / I
 
 ```sql
 CREATE TABLE site_content (
-  chave    NVARCHAR(50)  PRIMARY KEY, -- ex.: 'heroTitle'
+  chave    NVARCHAR(50)  PRIMARY KEY, -- ex.: 'heroTitle', 'logoUrl'
   valor    NVARCHAR(MAX) NOT NULL
 );
 
@@ -99,6 +99,7 @@ End If
 
 ```json
 {
+  "logoUrl": "https://costasoares.adv.br/uploads/logo.png",
   "heroTitle": "Costa Soares Advogados",
   "heroSubtitle": "Excelência em Direito Cível, Consumidor, Sucessório e Assessoria Empresarial.",
   "aboutTitle": "Tradição, ética e resultado",
@@ -125,6 +126,7 @@ End If
 ```
 
 ### Regras
+- `logoUrl` é **opcional**. Quando preenchido, o site exibe a imagem no cabeçalho e rodapé; quando vazio ou ausente, exibe o texto "Costa Soares Advogados".
 - Os campos `heroTitle`, `heroSubtitle`, `aboutTitle`, `aboutText` são **obrigatórios**.
 - `lawyers` deve conter **exatamente 2 itens** (estrutura visual do site).
 - `photoUrl` deve apontar para imagem **HTTPS**, idealmente 800×1000 px (proporção 4:5).

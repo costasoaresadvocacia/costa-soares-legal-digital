@@ -8,6 +8,7 @@ export interface SiteContent {
   aboutTitle: string;
   aboutText: string;
   lawyers: Lawyer[];
+  logoUrl?: string;
 }
 
 export interface Lawyer {
@@ -54,6 +55,7 @@ const fallbackContent: SiteContent = {
       photoUrl: "",
     },
   ],
+  logoUrl: "",
 };
 
 const fallbackPosts: Post[] = [
