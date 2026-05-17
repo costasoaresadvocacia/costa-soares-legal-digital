@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
 
 const links = [
   { href: "#sobre", label: "Sobre" },
@@ -9,7 +8,7 @@ const links = [
   { href: "#contato", label: "Contato" },
 ];
 
-const Header = () => {
+const Header = ({ logoUrl }: { logoUrl?: string }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
