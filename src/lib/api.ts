@@ -33,7 +33,7 @@ export interface Post {
 const fallbackContent: SiteContent = {
   heroTitle: "Costa Soares Advogados",
   heroSubtitle:
-    "Excelência em Direito Cível, Consumidor, Sucessório e Assessoria Empresarial.",
+    "Excelência em Direito Cível, Consumidor, Sucessório, Imobiliário e Assessoria Empresarial.",
   aboutTitle: "Tradição, ética e resultado",
   aboutText:
     "O escritório Costa Soares Advogados atua de forma personalizada e estratégica, com atendimento próximo ao cliente e profundo conhecimento técnico. Nossa missão é proteger direitos, prevenir litígios e construir soluções jurídicas sob medida para pessoas e empresas.",
@@ -41,18 +41,18 @@ const fallbackContent: SiteContent = {
     {
       id: 1,
       name: "Dr. Alessandro Vieira Costa",
-      title: "Sócio Fundador",
+      title: "Advogado",
       oab: "OAB/SP 354.000",
       bio: "Especialista em Direito do Consumidor e Assessoria Empresarial, dedicado à defesa estratégica de clientes corporativos e individuais.",
-      photoUrl: "",
+      photoUrl: "../arquivos/alessandrovieiracosta.png",
     },
     {
       id: 2,
       name: "Dra. Luciana Soares Silveira",
-      title: "Sócia Fundadora",
+      title: "Advogada",
       oab: "OAB/SP 198.510",
       bio: "Especialista em Direito Cível e Sucessório, com vasta experiência em causas complexas e planejamento patrimonial.",
-      photoUrl: "",
+      photoUrl: "../arquivos/lucianasoaressilveira.png",
     },
   ],
   logoUrl: "",
