@@ -33,7 +33,7 @@ export interface Post {
 const fallbackContent: SiteContent = {
   heroTitle: "Costa Soares Advogados",
   heroSubtitle:
-    "Excelência em Direito Cível, Consumidor, Sucessório e Assessoria Empresarial.",
+    "Excelência em Direito Cível, Consumidor, Sucessório, Imobiliário e Assessoria Empresarial.",
   aboutTitle: "Tradição, ética e resultado",
   aboutText:
     "O escritório Costa Soares Advogados atua de forma personalizada e estratégica, com atendimento próximo ao cliente e profundo conhecimento técnico. Nossa missão é proteger direitos, prevenir litígios e construir soluções jurídicas sob medida para pessoas e empresas.",
