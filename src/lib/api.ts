@@ -55,7 +55,7 @@ const fallbackContent: SiteContent = {
       photoUrl: "../arquivos/lucianasoaressilveira.png",
     },
   ],
-  logoUrl: "",
+  logoUrl: "../arquivos/logo.png",
 };
 
 const fallbackPosts: Post[] = [
