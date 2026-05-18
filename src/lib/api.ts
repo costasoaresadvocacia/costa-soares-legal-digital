@@ -1,6 +1,6 @@
 // API client for ASP Classic backend
 // Base URL — substitua pelo endpoint real do servidor ASP Clássico
-export const API_BASE_URL = "https://costasoares.adv.br/api";
+export const API_BASE_URL = "../api/";
 
 export interface SiteContent {
   heroTitle: string;
