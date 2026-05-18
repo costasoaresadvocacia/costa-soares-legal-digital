@@ -50,9 +50,8 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
         </div>
       </div>
       <div className="gold-divider mb-6" />
-      <div className="flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground gap-2">
+      <div className="text-center text-xs text-muted-foreground">
         <p>© {new Date().getFullYear()} Costa Soares Advogados. Todos os direitos reservados.</p>
-        <p className="tracking-widest uppercase">OAB · Advocacia Ética e Responsável</p>
       </div>
     </div>
   </footer>
