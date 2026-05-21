@@ -8,10 +8,14 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
           <div className="flex items-center gap-3 mb-4">
             {logoUrl ? (
               <img src={logoUrl} alt="Costa Soares" width={48} height={48} className="h-12 w-12 object-contain" />
-            ) : null}
+            ) : (
+              <div className="h-12 w-12 flex items-center justify-center border border-primary text-primary font-serif text-xl font-bold tracking-wider">
+                CS
+              </div>
+            )}
             <div>
               <div className="font-serif text-xl text-primary">Costa Soares</div>
-              <div className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Advogados</div>
+              <div className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Advocacia</div>
             </div>
           </div>
           <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
@@ -22,8 +26,8 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
           <h4 className="font-serif text-lg text-primary mb-4">Contato</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="tel:+5511972466811" className="hover:text-primary transition-smooth">(11) 9-7246-6811</a></li>
-            <li><a href="mailto:contato@costasoares.adv.br" className="hover:text-primary transition-smooth">contato@costasoares.adv.br</a></li>
-            <li>costasoares.adv.br</li>
+            <li><a href="mailto:contato@costasoaresadvocacia.com" className="hover:text-primary transition-smooth">contato@costasoaresadvocacia.com</a></li>
+            <li>costasoaresadvocacia.com</li>
           </ul>
         </div>
         <div>
@@ -51,7 +55,7 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
       </div>
       <div className="gold-divider mb-6" />
       <div className="text-center text-xs text-muted-foreground">
-        <p>© {new Date().getFullYear()} Costa Soares Advogados. Todos os direitos reservados.</p>
+        <p>© {new Date().getFullYear()} Costa Soares Advocacia. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
