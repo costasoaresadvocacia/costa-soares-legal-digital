@@ -55,7 +55,7 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
       </div>
       <div className="gold-divider mb-6" />
       <div className="text-center text-xs text-muted-foreground">
-        <p>© {new Date().getFullYear()} Costa Soares Advogados. Todos os direitos reservados.</p>
+        <p>© {new Date().getFullYear()} Costa Soares Advocacia. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
