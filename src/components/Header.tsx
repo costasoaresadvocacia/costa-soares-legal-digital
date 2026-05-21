@@ -27,11 +27,15 @@ const Header = ({ logoUrl }: { logoUrl?: string }) => {
       <div className="container mx-auto flex items-center justify-between py-4">
         <a href="#top" className="flex items-center gap-3">
           {logoUrl ? (
-            <img src={logoUrl} alt="Costa Soares Advogados" width={48} height={48} className="h-12 w-12 object-contain" />
-          ) : null}
+            <img src={logoUrl} alt="Costa Soares Advocacia" width={48} height={48} className="h-12 w-12 object-contain" />
+          ) : (
+            <div className="h-12 w-12 flex items-center justify-center border border-primary text-primary font-serif text-xl font-bold tracking-wider">
+              CS
+            </div>
+          )}
           <div className={logoUrl ? "hidden sm:block" : ""}>
             <div className="font-serif text-xl text-primary leading-none">Costa Soares</div>
-            <div className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Advogados</div>
+            <div className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Advocacia</div>
           </div>
         </a>
 
