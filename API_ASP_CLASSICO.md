@@ -365,3 +365,106 @@ Response.Write "{""ok"":true}"
 - **Domínio:** costasoares.adv.br
 - **E-mail:** contato@costasoares.adv.br
 - **Telefone / WhatsApp:** (11) 9-7246-6811
+
+---
+
+## 7. Painel Administrativo (`/admin`)
+
+O front-end inclui um painel em `costasoaresadvocacia.com/admin` com login, gestão de conteúdo, advogados, blog (com editor rico e upload de imagens). Todas as rotas exigem `Authorization: Bearer <token>`.
+
+### 7.1 Banco MySQL — tabelas adicionais
+
+```sql
+CREATE TABLE admin_users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(64) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,  -- bcrypt/sha256+salt
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE admin_sessions (
+  token CHAR(64) PRIMARY KEY,
+  user_id INT NOT NULL,
+  expires_at DATETIME NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  excerpt VARCHAR(300),
+  content MEDIUMTEXT,        -- HTML do editor rico
+  image_url VARCHAR(500),
+  url VARCHAR(500),
+  date DATE NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+> Cadastro inicial: insira um usuário admin manualmente com hash forte (bcrypt). Nunca armazene senha em texto plano.
+
+### 7.2 Endpoints administrativos
+
+| Método | Endpoint                          | Descrição                                  |
+| ------ | --------------------------------- | ------------------------------------------ |
+| POST   | `/api/admin/login.asp`            | `{username, password}` → `{token}`         |
+| POST   | `/api/admin/logout.asp`           | Invalida token atual                       |
+| GET    | `/api/admin/content.asp`          | Retorna `SiteContent` completo             |
+| POST   | `/api/admin/content.asp`          | Atualiza textos do site                    |
+| POST   | `/api/admin/lawyers.asp`          | Cria/atualiza advogado (id opcional)       |
+| DELETE | `/api/admin/lawyers.asp?id=N`     | Remove advogado                            |
+| GET    | `/api/admin/posts.asp`            | Lista artigos                              |
+| GET    | `/api/admin/posts.asp?id=N`       | Detalhe (inclui `content` HTML)            |
+| POST   | `/api/admin/posts.asp`            | Cria/atualiza artigo (id opcional)         |
+| DELETE | `/api/admin/posts.asp?id=N`       | Remove artigo                              |
+| POST   | `/api/admin/upload.asp`           | `multipart/form-data` (campo `file`) → `{url}` |
+
+### 7.3 Segurança recomendada
+
+- Hash de senha com bcrypt (ex.: componente `ASPHash`) ou PBKDF2/SHA-256 + salt.
+- Token aleatório de 32 bytes (hex) gerado no login, salvo em `admin_sessions` com validade (ex.: 8h).
+- Validar `Authorization: Bearer <token>` em todas as rotas `/admin/*`.
+- HTTPS obrigatório.
+- Rate limit no `login.asp` (ex.: 5 tentativas/min por IP).
+- Sanitizar HTML recebido em `content` dos posts antes de exibir publicamente (whitelist de tags).
+- Upload: validar tipo MIME (`image/*`), tamanho máximo (ex.: 5 MB), salvar em `/arquivos/uploads/` com nome aleatório.
+
+### 7.4 Exemplos
+
+**Login**
+```http
+POST /api/admin/login.asp
+Content-Type: application/json
+
+{ "username": "admin", "password": "***" }
+
+200 OK
+{ "token": "a1b2c3...", "expiresAt": "2026-05-22T03:00:00Z" }
+```
+
+**Salvar post**
+```http
+POST /api/admin/posts.asp
+Authorization: Bearer a1b2c3...
+Content-Type: application/json
+
+{
+  "id": 12,
+  "title": "Novo artigo",
+  "excerpt": "Resumo curto",
+  "content": "<p>Conteúdo HTML</p>",
+  "date": "2026-05-21",
+  "imageUrl": "/arquivos/uploads/abc.jpg"
+}
+```
+
+**Upload**
+```http
+POST /api/admin/upload.asp
+Authorization: Bearer a1b2c3...
+Content-Type: multipart/form-data; boundary=...
+
+200 OK
+{ "url": "/arquivos/uploads/9f3a.jpg" }
+```
