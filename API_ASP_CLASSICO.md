@@ -370,7 +370,7 @@ Response.Write "{""ok"":true}"
 
 ## 7. Painel Administrativo (`/admin`)
 
-O front-end inclui um painel em `costasoaresadvocacia.com/admin` com login, gestão de conteúdo, advogados, blog (com editor rico e upload de imagens). Todas as rotas exigem `Authorization: Bearer <token>`.
+O front-end inclui um painel em `costasoares.adv.br/admin` com login, gestão de conteúdo, advogados, blog (com editor rico e upload de imagens). Todas as rotas exigem `Authorization: Bearer <token>`.
 
 ### 7.1 Banco MySQL — tabelas adicionais
 
