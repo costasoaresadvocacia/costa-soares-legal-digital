@@ -26,8 +26,8 @@ const Footer = ({ logoUrl }: { logoUrl?: string }) => (
           <h4 className="font-serif text-lg text-primary mb-4">Contato</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="tel:+5511972466811" className="hover:text-primary transition-smooth">(11) 9-7246-6811</a></li>
-            <li><a href="mailto:contato@costasoaresadvocacia.com" className="hover:text-primary transition-smooth">contato@costasoaresadvocacia.com</a></li>
-            <li>costasoaresadvocacia.com</li>
+            <li><a href="mailto:contato@costasoares.adv.br" className="hover:text-primary transition-smooth">contato@costasoares.adv.br</a></li>
+            <li>costasoares.adv.br</li>
           </ul>
         </div>
         <div>
