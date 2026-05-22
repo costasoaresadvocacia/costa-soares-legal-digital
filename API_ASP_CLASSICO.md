@@ -468,3 +468,88 @@ Content-Type: multipart/form-data; boundary=...
 200 OK
 { "url": "/arquivos/uploads/9f3a.jpg" }
 ```
+
+---
+
+## 12. Fallback SPA no IIS (CRÍTICO para `/admin` e rotas internas)
+
+O front-end é uma **SPA React** (single page application). Quando o visitante acessa `costasoares.adv.br/admin` diretamente (ou faz F5 em qualquer rota interna), o IIS tenta abrir um arquivo/pasta físico chamado `admin` — e retorna **404**.
+
+A correção é configurar o **URL Rewrite** para reescrever qualquer rota que **não** seja arquivo físico, não seja pasta física e não comece com `/api/` para `index.html`.
+
+### `web.config` (na raiz do site)
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <system.webServer>
+    <rewrite>
+      <rules>
+        <rule name="SPA Fallback" stopProcessing="true">
+          <match url=".*" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+            <add input="{REQUEST_URI}" pattern="^/api/" negate="true" />
+            <add input="{REQUEST_URI}" pattern="^/arquivos/" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/index.html" />
+        </rule>
+      </rules>
+    </rewrite>
+    <staticContent>
+      <mimeMap fileExtension=".webp" mimeType="image/webp" />
+    </staticContent>
+  </system.webServer>
+</configuration>
+```
+
+> Requer o módulo **URL Rewrite 2.x** instalado no IIS (download oficial Microsoft). Sem ele, `/admin`, `/admin/login` e qualquer outra rota interna do React retornarão 404.
+
+### Deploy do build
+
+1. Rodar `npm run build` — gera a pasta `dist/`.
+2. Copiar o conteúdo de `dist/` para a raiz do site no IIS (ex.: `C:\inetpub\wwwroot\costasoares\`).
+3. Manter `web.config` na raiz, junto do `index.html` gerado.
+4. Pasta `/api/` (ASP Clássico) e `/arquivos/` (uploads) **permanecem isoladas** do rewrite — as duas condições `negate="true"` acima garantem isso.
+
+---
+
+## 13. Blog — Como funciona
+
+### 13.1 Front-end público
+
+- Componente: `src/components/Blog.tsx` (renderiza a seção `#blog` na home).
+- Carrega via `fetchPosts()` → `GET /api/posts.asp` (seção 5).
+- Cada card mostra `date`, `title`, `excerpt` e link para `url` do post (campo opcional).
+- **Hoje não há página interna de detalhe** — o clique abre a URL informada em `url`. Se quiser leitura dentro do site, o caminho recomendado é criar uma rota `/blog/:slug` que consome `GET /api/posts.asp?id=N` (mesmo endpoint usado pelo admin, retornando o `content` HTML).
+
+### 13.2 Admin
+
+- Listagem: `/admin/posts` (`src/admin/pages/Posts.tsx`) → `GET /api/admin/posts.asp`.
+- Editor: `/admin/posts/new` e `/admin/posts/:id` (`src/admin/pages/PostEditor.tsx`).
+- Editor rico: `react-quill-new` com formatação (negrito, listas, títulos, alinhamento, link, citação) e **upload de imagens inline** via `POST /api/admin/upload.asp`.
+- Campos enviados ao salvar (`POST /api/admin/posts.asp`):
+
+```json
+{
+  "id": 12,                        // omitir para criar novo
+  "title": "Título do artigo",
+  "excerpt": "Resumo curto exibido no card",
+  "content": "<p>HTML do editor rico</p>",
+  "date": "2026-05-22",            // ISO YYYY-MM-DD
+  "imageUrl": "/arquivos/uploads/capa.jpg",
+  "url": "/blog/titulo-do-artigo"  // opcional
+}
+```
+
+### 13.3 Checklist para o blog funcionar
+
+- [ ] Tabela `posts` criada (seção 7.1).
+- [ ] `GET /api/posts.asp` retornando lista pública (apenas `publicado=1` se for usar essa flag).
+- [ ] `GET /api/admin/posts.asp` e `GET /api/admin/posts.asp?id=N` retornando JSON com `content`.
+- [ ] `POST /api/admin/posts.asp` aceitando INSERT (sem `id`) e UPDATE (com `id`).
+- [ ] `DELETE /api/admin/posts.asp?id=N` removendo registro.
+- [ ] `POST /api/admin/upload.asp` salvando em `/arquivos/uploads/` e retornando `{ "url": "..." }`.
+- [ ] Sanitização do HTML salvo em `content` antes de exibir no site público (whitelist de tags).
+
