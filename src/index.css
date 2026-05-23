@@ -127,3 +127,16 @@
 }
 .ql-editor.ql-blank::before { color: hsl(var(--muted-foreground)); font-style: normal; }
 .ql-snow a { color: hsl(var(--primary)); }
+
+/* Article body */
+.prose-article h2 { font-family: 'Playfair Display', serif; font-size: 1.75rem; margin: 2rem 0 1rem; color: hsl(var(--primary)); }
+.prose-article h3 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin: 1.5rem 0 .75rem; }
+.prose-article p { margin: 0 0 1.1rem; line-height: 1.8; }
+.prose-article ul, .prose-article ol { margin: 0 0 1.1rem 1.5rem; line-height: 1.8; }
+.prose-article ul { list-style: disc; }
+.prose-article ol { list-style: decimal; }
+.prose-article a { color: hsl(var(--primary)); text-decoration: underline; }
+.prose-article blockquote { border-left: 3px solid hsl(var(--primary)); padding-left: 1rem; margin: 1.5rem 0; font-style: italic; color: hsl(var(--muted-foreground)); }
+.prose-article img { max-width: 100%; height: auto; margin: 1.5rem 0; border: 1px solid hsl(var(--border)); }
+.prose-article strong { color: hsl(var(--foreground)); }
+
