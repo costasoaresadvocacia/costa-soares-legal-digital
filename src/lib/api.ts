@@ -27,6 +27,7 @@ export interface Post {
   date: string;
   imageUrl?: string;
   url?: string;
+  content?: string; // HTML do corpo do artigo
 }
 
 // Fallback content used when API is unreachable (developer-friendly default)
