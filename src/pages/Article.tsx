@@ -102,7 +102,7 @@ const Article = () => {
             to="/#blog"
             className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary mb-8 hover:opacity-80"
           >
-            <ArrowLeft className="h-3 w-3" /> Voltar ao blog
+            <ArrowLeft className="h-3 w-3" /> Voltar
           </Link>
 
           <div className="text-xs uppercase tracking-widest text-primary mb-4">{formattedDate}</div>
