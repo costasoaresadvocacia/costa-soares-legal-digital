@@ -100,6 +100,17 @@ export async function fetchPosts(): Promise<Post[]> {
   }
 }
 
+export async function fetchPost(id: number | string): Promise<Post | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/posts.asp?id=${id}`);
+    if (!res.ok) throw new Error("API indisponível");
+    return await res.json();
+  } catch {
+    const fb = fallbackPosts.find((p) => String(p.id) === String(id));
+    return fb ? { ...fb, content: `<p>${fb.excerpt}</p>` } : null;
+  }
+}
+
 export interface ContactPayload {
   name: string;
   email: string;
