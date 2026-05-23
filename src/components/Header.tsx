@@ -50,7 +50,7 @@ const Header = ({ logoUrl }: { logoUrl?: string }) => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4">
-        <a href="#top" className="flex items-center gap-3">
+        <a href="/" onClick={goHome} className="flex items-center gap-3">
           {logoUrl ? (
             <img src={logoUrl} alt="Costa Soares Advocacia" width={48} height={48} className="h-12 w-12 object-contain" />
           ) : (
