@@ -95,7 +95,7 @@ const Header = ({ logoUrl }: { logoUrl?: string }) => {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => goToSection(e, l.href)}
                 className="text-sm uppercase tracking-wider text-foreground/80 hover:text-primary"
               >
                 {l.label}
