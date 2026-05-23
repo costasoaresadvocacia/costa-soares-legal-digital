@@ -553,3 +553,185 @@ A correção é configurar o **URL Rewrite** para reescrever qualquer rota que *
 - [ ] `POST /api/admin/upload.asp` salvando em `/arquivos/uploads/` e retornando `{ "url": "..." }`.
 - [ ] Sanitização do HTML salvo em `content` antes de exibir no site público (whitelist de tags).
 
+
+---
+
+## 14. Página interna do artigo (`/#/artigo/:id`)
+
+Cada post do blog agora abre uma **página interna** no front-end (rota `/#/artigo/:id`, devido ao `HashRouter`). Essa página renderiza cabeçalho, rodapé, título, linha fina (resumo), imagem ilustrativa (quando presente), corpo HTML, e botões de compartilhamento.
+
+### 14.1 Endpoint público de detalhe — `GET /api/posts.asp?id=N`
+
+O mesmo arquivo `posts.asp` deve responder a **dois modos**:
+
+| Chamada                          | Resposta                                                                 |
+| -------------------------------- | ------------------------------------------------------------------------ |
+| `GET /api/posts.asp`             | **Array** com os posts publicados (já documentado na seção 5).           |
+| `GET /api/posts.asp?id=N`        | **Objeto único** com o post `N`, **incluindo o campo `content` (HTML)**. |
+
+#### Exemplo de resposta `?id=12`
+
+```json
+{
+  "id": 12,
+  "title": "Novas regras do Código de Defesa do Consumidor",
+  "excerpt": "Entenda as recentes mudanças e como elas impactam suas relações de consumo.",
+  "date": "2026-04-12",
+  "imageUrl": "https://costasoares.adv.br/arquivos/uploads/post-12.jpg",
+  "url": "",
+  "content": "<p>Texto do artigo em HTML, gerado pelo editor rico do admin...</p><h2>Subtítulo</h2><p>...</p>"
+}
+```
+
+> **Importante:** o campo `content` é HTML produzido pelo editor rico do admin. **Sanitize com whitelist** (tags permitidas: `p, h2, h3, ul, ol, li, strong, em, a[href], blockquote, img[src|alt], br`) antes de salvar e/ou antes de exibir, para evitar XSS.
+
+#### Esqueleto VBScript
+
+```asp
+Dim qid : qid = Request.QueryString("id")
+If Len(qid) > 0 And IsNumeric(qid) Then
+  ' --- modo detalhe ---
+  Dim cmd : Set cmd = Server.CreateObject("ADODB.Command")
+  cmd.ActiveConnection = conn
+  cmd.CommandText = "SELECT id, titulo, resumo, conteudo, data_pub, imagem_url, url FROM posts WHERE id = ? AND publicado = 1"
+  cmd.Parameters.Append cmd.CreateParameter("p1", 3, 1, , CLng(qid))
+  Set rs = cmd.Execute
+  If Not rs.EOF Then
+    Dim obj : Set obj = jsObject()
+    obj("id")       = CLng(rs("id"))
+    obj("title")    = rs("titulo") & ""
+    obj("excerpt")  = rs("resumo") & ""
+    obj("content")  = rs("conteudo") & ""    ' HTML
+    obj("date")     = Left(CStr(rs("data_pub")), 10)
+    obj("imageUrl") = rs("imagem_url") & ""
+    obj("url")      = rs("url") & ""
+    Response.Write obj.Serialize()
+  Else
+    Response.Status = "404 Not Found"
+    Response.Write "{""error"":""Post não encontrado""}"
+  End If
+Else
+  ' --- modo lista (já documentado na seção 5) ---
+End If
+```
+
+### 14.2 Compartilhamento em redes sociais
+
+A página de artigo monta automaticamente os links de share para **WhatsApp, Facebook, X (Twitter) e LinkedIn**, além de **copiar link** para a área de transferência. O texto compartilhado inclui:
+
+- Título do artigo.
+- URL canônica: `https://costasoares.adv.br/#/artigo/{id}`.
+- Resumo (`excerpt`).
+- Frase final fixa: **"Para saber mais, acesse costasoares.adv.br e fique por dentro das principais novidades do mundo jurídico."**
+- Link para o site.
+
+> Facebook e WhatsApp só puxam a **imagem** automaticamente quando o **crawler deles consegue acessar a URL** e ler **Open Graph** tags. Como a rota é via `HashRouter` (a parte após `#` não chega ao servidor), as redes leem o `index.html` raiz. Para que cada artigo apareça com sua **imagem e título próprios** no preview do Facebook/WhatsApp/LinkedIn, há **duas opções**:
+>
+> 1. **(Recomendado)** Criar uma rota ASP `/artigo.asp?id=N` que retorne um HTML mínimo com as meta tags Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) do post e um `<meta http-equiv="refresh" content="0; url=/#/artigo/N">` redirecionando o visitante humano para a SPA. Atualizar o `pageUrl` em `src/pages/Article.tsx` para apontar para essa rota canônica.
+> 2. Migrar do `HashRouter` para `BrowserRouter` quando o servidor suportar fallback SPA (web.config da seção 12).
+
+Enquanto isso, a imagem é passada como parâmetro `picture` ao Facebook Sharer (limitada/ignorada por alguns clientes), e WhatsApp/Twitter recebem o texto + URL no corpo da mensagem.
+
+### 14.3 Linha fina
+
+O campo **`excerpt`** (resumo, 1–2 linhas) é exibido logo abaixo do título como **linha fina** (subtítulo editorial). O admin já possui esse campo no editor de posts (`/admin/posts/new` e `/admin/posts/:id`).
+
+---
+
+## 15. Upload de imagens dos artigos
+
+### 15.1 Endpoint — `POST /api/admin/upload.asp`
+
+Recebe um `multipart/form-data` com o campo **`file`** e retorna `{ "url": "/arquivos/uploads/<nome>.<ext>" }`.
+
+Usado em **dois lugares** do admin:
+
+| Origem                                       | Como é chamado                                                   |
+| -------------------------------------------- | ----------------------------------------------------------------- |
+| Campo "Imagem de capa" em `/admin/posts/...` | `adminUploadImage(file)` → retorna URL salva em `posts.image_url` |
+| Inserção de imagens dentro do editor rico    | Mesma rota; URL é embutida no HTML do `content`                    |
+
+### 15.2 Requisitos
+
+- **Autenticação:** `Authorization: Bearer <token>` obrigatório.
+- **MIME aceitos:** `image/jpeg`, `image/png`, `image/webp`, `image/gif`.
+- **Tamanho máximo:** 5 MB (rejeite com `413 Payload Too Large`).
+- **Dimensões recomendadas:** 1200×675 px (16:9) para capa; o editor rico ajusta inline.
+- **Pasta destino:** `C:\inetpub\wwwroot\costasoares\arquivos\uploads\` (servida em `/arquivos/uploads/`).
+- **Nome do arquivo:** gere aleatório (ex.: GUID + extensão original em minúsculas). **Nunca** confie no nome enviado pelo cliente.
+- **Permissões IIS:** `IUSR` / `IIS_IUSRS` com gravação na pasta `uploads`.
+- **Excluir do rewrite:** já tratado pelo `web.config` (seção 12) com a condição `^/arquivos/`.
+
+### 15.3 Esqueleto VBScript (usando componente de upload `aspSmartUpload` ou `Persits.Upload`)
+
+```asp
+<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %>
+<%
+Response.ContentType = "application/json"
+
+' 1. Valida token
+Dim auth : auth = Request.ServerVariables("HTTP_AUTHORIZATION")
+If Not ValidaToken(auth) Then
+  Response.Status = "401 Unauthorized"
+  Response.Write "{""ok"":false,""error"":""Token inválido""}"
+  Response.End
+End If
+
+' 2. Recebe arquivo
+Dim Upload : Set Upload = Server.CreateObject("Persits.Upload")
+Upload.SetMaxSize 5 * 1024 * 1024, True  ' 5 MB
+Upload.Save Server.MapPath("/arquivos/uploads/_tmp")
+
+Dim file : Set file = Upload.Files("file")
+If file Is Nothing Then
+  Response.Status = "400 Bad Request"
+  Response.Write "{""ok"":false,""error"":""Arquivo ausente""}"
+  Response.End
+End If
+
+' 3. Valida MIME
+Dim okMime
+Select Case LCase(file.ContentType)
+  Case "image/jpeg", "image/png", "image/webp", "image/gif" : okMime = True
+  Case Else : okMime = False
+End Select
+If Not okMime Then
+  file.Delete
+  Response.Status = "415 Unsupported Media Type"
+  Response.Write "{""ok"":false,""error"":""Tipo de arquivo não permitido""}"
+  Response.End
+End If
+
+' 4. Renomeia e salva definitivo
+Dim ext : ext = LCase(file.Ext)
+Dim novoNome : novoNome = Replace(Server.CreateObject("Scriptlet.TypeLib").Guid, "{", "")
+novoNome = Replace(novoNome, "}", "") & "." & ext
+file.SaveAs Server.MapPath("/arquivos/uploads/" & novoNome)
+
+Response.Write "{""url"":""/arquivos/uploads/" & novoNome & """}"
+%>
+```
+
+### 15.4 Como o front-end consome
+
+```ts
+// src/lib/adminApi.ts
+export async function adminUploadImage(file: File): Promise<string | null> {
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await authFetch("/admin/upload.asp", { method: "POST", body: fd });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data?.url || null;
+}
+```
+
+### 15.5 Checklist de upload
+
+- [ ] Componente de upload instalado no IIS (`Persits.Upload` ou equivalente).
+- [ ] Pasta `arquivos/uploads/` criada com permissão de escrita para o IIS.
+- [ ] Validação de MIME e tamanho no servidor.
+- [ ] Nome do arquivo aleatório (GUID) — nunca usar `file.FileName` diretamente.
+- [ ] Token validado em todas as chamadas a `upload.asp`.
+- [ ] URLs retornadas como caminho relativo `/arquivos/uploads/<arquivo>` (servem tanto em dev quanto em produção).
+- [ ] Limpeza periódica de uploads órfãos (não referenciados em `posts.image_url` nem em `posts.content`).

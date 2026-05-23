@@ -27,6 +27,7 @@ export interface Post {
   date: string;
   imageUrl?: string;
   url?: string;
+  content?: string; // HTML do corpo do artigo
 }
 
 // Fallback content used when API is unreachable (developer-friendly default)
@@ -96,6 +97,17 @@ export async function fetchPosts(): Promise<Post[]> {
     return await res.json();
   } catch {
     return fallbackPosts;
+  }
+}
+
+export async function fetchPost(id: number | string): Promise<Post | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/posts.asp?id=${id}`);
+    if (!res.ok) throw new Error("API indisponível");
+    return await res.json();
+  } catch {
+    const fb = fallbackPosts.find((p) => String(p.id) === String(id));
+    return fb ? { ...fb, content: `<p>${fb.excerpt}</p>` } : null;
   }
 }
 

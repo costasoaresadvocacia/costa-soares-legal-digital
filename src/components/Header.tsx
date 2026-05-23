@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const links = [
   { href: "#sobre", label: "Sobre" },
@@ -11,12 +12,36 @@ const links = [
 const Header = ({ logoUrl }: { logoUrl?: string }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const goToSection = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    setOpen(false);
+    const id = href.replace("#", "");
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const goHome = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
+    if (location.pathname !== "/") navigate("/");
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
 
   return (
     <header
@@ -25,7 +50,7 @@ const Header = ({ logoUrl }: { logoUrl?: string }) => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4">
-        <a href="#top" className="flex items-center gap-3">
+        <a href="/" onClick={goHome} className="flex items-center gap-3">
           {logoUrl ? (
             <img src={logoUrl} alt="Costa Soares Advocacia" width={48} height={48} className="h-12 w-12 object-contain" />
           ) : (
@@ -44,6 +69,7 @@ const Header = ({ logoUrl }: { logoUrl?: string }) => {
             <a
               key={l.href}
               href={l.href}
+              onClick={(e) => goToSection(e, l.href)}
               className="text-sm uppercase tracking-wider text-foreground/80 hover:text-primary transition-smooth"
             >
               {l.label}
@@ -69,7 +95,7 @@ const Header = ({ logoUrl }: { logoUrl?: string }) => {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => goToSection(e, l.href)}
                 className="text-sm uppercase tracking-wider text-foreground/80 hover:text-primary"
               >
                 {l.label}
