@@ -12,12 +12,36 @@ const links = [
 const Header = ({ logoUrl }: { logoUrl?: string }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const goToSection = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    setOpen(false);
+    const id = href.replace("#", "");
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const goHome = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
+    if (location.pathname !== "/") navigate("/");
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
 
   return (
     <header
