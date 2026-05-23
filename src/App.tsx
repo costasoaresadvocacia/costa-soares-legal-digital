@@ -27,6 +27,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/artigo/:id" element={<Article />} />
             <Route path="/admin/login" element={<Login />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<AdminLayout />}>
