@@ -45,12 +45,14 @@ const Hero = ({ title, subtitle }: { title: string; subtitle: string }) => {
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <a
           href="#contato"
+          onClick={(e) => goToSection(e, "contato")}
           className="inline-block bg-gradient-gold text-primary-foreground px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-gold hover:opacity-90 transition-smooth"
         >
           Agendar Consulta
         </a>
         <a
           href="#areas"
+          onClick={(e) => goToSection(e, "areas")}
           className="inline-block border border-primary text-primary px-8 py-4 text-sm uppercase tracking-widest font-medium hover:bg-primary hover:text-primary-foreground transition-smooth"
         >
           Áreas de Atuação
@@ -58,6 +60,7 @@ const Hero = ({ title, subtitle }: { title: string; subtitle: string }) => {
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default Hero;
