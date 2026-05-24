@@ -1,6 +1,23 @@
 import heroImg from "@/assets/hero.jpg";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Hero = ({ title, subtitle }: { title: string; subtitle: string }) => (
+const Hero = ({ title, subtitle }: { title: string; subtitle: string }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const goToSection = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
   <section id="top" className="relative min-h-screen flex items-center justify-center overflow-hidden">
     <img
       src={heroImg}
